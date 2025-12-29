@@ -1,0 +1,9 @@
+{
+    "name": "Dev NFT #1",
+    "description": "我的的第一个 Web3 作品",
+    "image": "ipfs://bafkreigunx27xny7qwioh5hy4lsqqz6fpld4lbve4i2qatqwtn4hb7bme4",
+    "attributes": [
+        { "trait_type": "Level", "value": "Senior Dev" },
+        { "trait_type": "Stack", "value": "Vue & React" }
+    ]
+}
