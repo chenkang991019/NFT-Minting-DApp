@@ -5,7 +5,7 @@
 ---
 
 ````markdown
-![App Screenshot](./public/screenshot.png)
+![App Screenshot](https://github.com/chenkang991019/NFT-Minting-DApp/blob/main/public/screenshot.png)
 
 ## ✨ Features
 
