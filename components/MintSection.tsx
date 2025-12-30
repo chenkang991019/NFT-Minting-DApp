@@ -4,15 +4,16 @@ import { useState, useEffect } from 'react'
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { parseEther } from 'viem'
 import abi from '../abi.json'
+import { CONTRACT_ADDRESS } from '@/uilts/index'
 
 // 记得换成你部署好的合约地址
-const CONTRACT_ADDRESS = '0x6229fAe25410E22C909b3974D52Af7c84abbaA05'
+// const CONTRACT_ADDRESS = '0xa15c370A7f354847b25Bf0d566266577FbE4EC64'
 
 export default function MintSection() {
     const { isConnected, address } = useAccount()
 
     // 读取已铸造数量
-    const { data: totalSupply } = useReadContract({
+    const { data: totalSupply, refetch: refetchSupply } = useReadContract({
         address: CONTRACT_ADDRESS,
         abi: abi,
         functionName: 'totalSupply'
@@ -34,6 +35,15 @@ export default function MintSection() {
             value: parseEther('0.001')
         })
     }
+
+    //新增一个 useEffect：监听交易确认状态
+    useEffect(() => {
+        if (isConfirmed) {
+            console.log('交易确认了！正在刷新数据...')
+            // 核心动作：重新去链上读一次“现在有多少个NFT”
+            refetchSupply()
+        }
+    }, [isConfirmed, refetchSupply])
 
     // 读取合约里的 owner 地址
     const { data: ownerAddress } = useReadContract({

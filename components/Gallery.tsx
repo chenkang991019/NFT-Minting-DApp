@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useAccount, useReadContract, usePublicClient } from 'wagmi'
 import abi from '../abi.json'
 
-const CONTRACT_ADDRESS = '0x6229fAe25410E22C909b3974D52Af7c84abbaA05' // 记得填这里！
+import { CONTRACT_ADDRESS } from '@/uilts/index'
 // 1. 找一张“盲盒/问号”图片的链接作为默认图
 const MYSTERY_BOX_IMAGE = 'https://placehold.co/400x400/1e293b/FFF?text=Mystery+Box'
 // 定义一个接口，方便管理数据
