@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎨 DevNFT Minting DApp
 
-## Getting Started
+**[Live Demo](https://nft-minting-d-app-5j4y-lfm0dfxpl-chenkangs-projects-fc27279a.vercel.app)** | **[Verified Contract](https://sepolia.etherscan.io/address/0xa15c370A7f354847b25Bf0d566266577FbE4EC64)**
 
-First, run the development server:
+---
+
+````markdown
+![App Screenshot](./public/screenshot.png)
+
+## ✨ Features
+
+-   **👜 Wallet Connection**: Integrated with **RainbowKit** & **Wagmi v2**, supporting MetaMask and WalletConnect.
+-   **⚡ Real-time Minting**: Automatic UI updates upon transaction confirmation (using `useWaitForTransactionReceipt`).
+-   **🖼️ NFT Gallery**: Dynamic fetching of NFT metadata from **IPFS** with automatic fallback gateways (Cloudflare/Pinata).
+-   **🛡️ Admin Panel**: Exclusive dashboard for the contract owner to withdraw funds (`Ownable` pattern).
+-   **🔧 Robust Error Handling**: Handles IPFS path issues, network switching, and user rejection gracefully.
+
+## 🛠️ Tech Stack
+
+-   **Frontend**: Next.js, TypeScript, Tailwind CSS
+-   **Web3 Integration**: Wagmi v2, Viem, TanStack Query
+-   **Smart Contract**: Solidity (ERC-721), OpenZeppelin
+-   **Storage**: IPFS (Pinata)
+-   **Deployment**: Vercel (Frontend), Remix (Contract)
+
+## 🔗 Smart Contract Details
+
+The smart contract is deployed on the **Sepolia Testnet**.
+
+| Item              | Value                                        |
+| :---------------- | :------------------------------------------- |
+| **Network**       | Sepolia                                      |
+| **Contract Name** | `DevNFTv2`                                   |
+| **Address**       | `0xa15c370A7f354847b25Bf0d566266577FbE4EC64` |
+| **Status**        | ✅ Verified on Etherscan                     |
+
+> Source code can be found in the [`contracts/`](./contracts/) directory.
+
+## 🚀 Getting Started
+
+Follow these steps to run the project locally.
+
+### 1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/chenkang991019/NFT-Minting-DApp.git
+cd my-nft-dapp
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+````
