@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react'
 import { useAccount, useReadContract, usePublicClient } from 'wagmi'
 import abi from '../abi.json'
 
-const CONTRACT_ADDRESS = '0x8868D42070929B3558E5d8D9b97998724ac54344' // 记得填这里！
-
+const CONTRACT_ADDRESS = '0x6229fAe25410E22C909b3974D52Af7c84abbaA05' // 记得填这里！
+// 1. 找一张“盲盒/问号”图片的链接作为默认图
+const MYSTERY_BOX_IMAGE = 'https://placehold.co/400x400/1e293b/FFF?text=Mystery+Box'
 // 定义一个接口，方便管理数据
 interface MyNFT {
     id: number
@@ -31,7 +32,7 @@ export default function Gallery() {
     const getIpfsUrl = (uri: string) => {
         if (!uri) return ''
         // 修复那个 "1" 的 bug
-        if (uri.endsWith('1')) uri = uri.slice(0, -1)
+        // if (uri.endsWith('1')) uri = uri.slice(0, -1)
 
         if (uri.startsWith('http')) return uri
         return uri.replace('ipfs://', 'https://ipfs.io/ipfs/')
@@ -53,7 +54,7 @@ export default function Gallery() {
             // (注意：生产环境如果有一万个，这样做会卡死，需要用 TheGraph 或 Alchemy API)
             for (let i = 1; i <= total; i++) {
                 try {
-                    // A. 查主人：ID i 是谁的？
+                    // A. 查主人
                     const owner = (await publicClient.readContract({
                         address: CONTRACT_ADDRESS,
                         abi: abi,
@@ -61,32 +62,52 @@ export default function Gallery() {
                         args: [BigInt(i)]
                     })) as string
 
-                    // B. 如果主人是你，就去拿图片
                     if (owner.toLowerCase() === address.toLowerCase()) {
-                        // C. 查 URI
-                        const tokenURI = (await publicClient.readContract({
+                        let tokenURI = (await publicClient.readContract({
                             address: CONTRACT_ADDRESS,
                             abi: abi,
                             functionName: 'tokenURI',
                             args: [BigInt(i)]
                         })) as string
 
-                        // D. 请求 Metadata JSON
-                        // 使用 Cloudflare 网关，速度快一点
+                        // 这里不需要正则砍数字了，因为现在是文件夹模式，/6 是合理的路径，只是文件不存在
+
+                        // B. 请求 Metadata
                         const httpUri = getIpfsUrl(tokenURI).replace('ipfs://', 'https://ipfs.io/ipfs/')
 
-                        const response = await fetch(httpUri)
-                        const metadata = await response.json()
+                        let name = `Dev NFT #${i}`
+                        let image = MYSTERY_BOX_IMAGE // 默认先设为盲盒图
 
-                        // E. 存入数组
+                        try {
+                            // 尝试请求 IPFS 数据
+                            const response = await fetch(httpUri)
+
+                            if (response.ok) {
+                                // ✅ 如果请求成功 (文件存在)
+                                const metadata = await response.json()
+                                name = metadata.name || name
+                                if (metadata.image) {
+                                    image = getIpfsUrl(metadata.image).replace('ipfs://', 'https://ipfs.io/ipfs/')
+                                }
+                            } else {
+                                // ❌ 如果请求失败 (比如 404 没找到文件 #6)
+                                console.warn(`Token #${i} 的 Metadata 还没上传`)
+                                // 这里不做任何事，变量 image 保持为默认的盲盒图
+                            }
+                        } catch (networkError) {
+                            console.warn(`Token #${i} 网络请求失败，显示默认图`)
+                        }
+
+                        // C. 无论有没有 Metadata，都把这个 NFT 展示出来
+                        // 这样用户知道自己买了 #6，只是还没开图
                         myTokens.push({
                             id: i,
-                            name: metadata.name || `Dev NFT #${i}`,
-                            image: getIpfsUrl(metadata.image).replace('ipfs://', 'https://ipfs.io/ipfs/')
+                            name: name,
+                            image: image
                         })
                     }
                 } catch (err) {
-                    console.error(`加载 ID ${i} 失败`, err)
+                    console.error(`查询链上数据失败 ID ${i}`, err)
                 }
             }
 

@@ -6,7 +6,7 @@ import { parseEther } from 'viem'
 import abi from '../abi.json'
 
 // 记得换成你部署好的合约地址
-const CONTRACT_ADDRESS = '0x8868D42070929B3558E5d8D9b97998724ac54344'
+const CONTRACT_ADDRESS = '0x6229fAe25410E22C909b3974D52Af7c84abbaA05'
 
 export default function MintSection() {
     const { isConnected, address } = useAccount()
@@ -58,71 +58,71 @@ export default function MintSection() {
     console.log(isOwner)
 
     // 1. 新增状态：用来存图片的 URL
-    const [imageUri, setImageUri] = useState<string>('')
+    // const [imageUri, setImageUri] = useState<string>('')
 
     // 2. 读取 Token ID 为 1 的 URI (假设你Mint的是第1个)
-    const { data: tokenUriData } = useReadContract({
-        address: CONTRACT_ADDRESS,
-        abi: abi,
-        functionName: 'tokenURI',
-        args: [1n] // 读取第1个NFT，注意要用 BigInt 格式
-    })
+    // const { data: tokenUriData } = useReadContract({
+    //     address: CONTRACT_ADDRESS,
+    //     abi: abi,
+    //     functionName: 'tokenURI',
+    //     args: [1n] // 读取第1个NFT，注意要用 BigInt 格式
+    // })
 
     // ✅ 1. 定义一个转换 IPFS 链接的工具函数
     // 它可以把 ipfs:// 转换成浏览器能访问的 HTTP 链接
-    const getIpfsUrl = (uri: string) => {
-        if (!uri) return ''
-        // 如果已经是 http 开头，直接返回
-        if (uri.startsWith('http')) return uri
-        // 如果是 ipfs:// 开头，替换成官方网关
-        // 既然刚才你试了 ipfs.io 能用，我们就全用它！
-        return uri.replace('ipfs://', 'https://ipfs.io/ipfs/')
-    }
+    // const getIpfsUrl = (uri: string) => {
+    //     if (!uri) return ''
+    //     // 如果已经是 http 开头，直接返回
+    //     if (uri.startsWith('http')) return uri
+    //     // 如果是 ipfs:// 开头，替换成官方网关
+    //     // 既然刚才你试了 ipfs.io 能用，我们就全用它！
+    //     return uri.replace('ipfs://', 'https://ipfs.io/ipfs/')
+    // }
 
     // ✅ 2. 动态请求逻辑
-    useEffect(() => {
-        const fetchMetadata = async () => {
-            // 如果合约还没读到数据，先不动
-            if (!tokenUriData) return
+    // useEffect(() => {
+    //     const fetchMetadata = async () => {
+    //         // 如果合约还没读到数据，先不动
+    //         if (!tokenUriData) return
 
-            try {
-                let uriString = tokenUriData as string
-                console.log('正在请求 Metadata URI:', uriString)
+    //         try {
+    //             let uriString = tokenUriData as string
+    //             console.log('正在请求 Metadata URI:', uriString)
 
-                // 🛠️ 关键修复：如果你发现链接以 "1" 结尾，把它切掉！
-                // 这样就变回了你上传的那个 JSON 文件的正确 CID
-                if (uriString.endsWith('1')) {
-                    uriString = uriString.slice(0, -1)
-                }
+    //             // 🛠️ 关键修复：如果你发现链接以 "1" 结尾，把它切掉！
+    //             // 这样就变回了你上传的那个 JSON 文件的正确 CID
+    //             // if (uriString.endsWith('1')) {
+    //             //     uriString = uriString.slice(0, -1)
+    //             // }
 
-                // A. 转换 JSON 的下载链接
-                const metadataUrl = getIpfsUrl(uriString)
+    //             // A. 转换 JSON 的下载链接
+    //             const metadataUrl = getIpfsUrl(uriString)
 
-                // B. 发起请求 (利用浏览器发请求，不再经过后端 API)
-                const response = await fetch(metadataUrl)
+    //             // B. 发起请求 (利用浏览器发请求，不再经过后端 API)
+    //             const response = await fetch(metadataUrl)
 
-                // 如果网络不通，抛出错误
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`)
-                }
+    //             // 如果网络不通，抛出错误
+    //             if (!response.ok) {
+    //                 throw new Error(`HTTP error! status: ${response.status}`)
+    //             }
 
-                const json = await response.json()
-                console.log('拿到 JSON 数据了:', json)
+    //             const json = await response.json()
+    //             console.log('拿到 JSON 数据了:', json)
 
-                // C. 从 JSON 里提取图片链接
-                if (json.image) {
-                    // 把 JSON 里的 ipfs:// 图片链接也转换一下
-                    const imgUrl = getIpfsUrl(json.image)
-                    setImageUri(imgUrl)
-                }
-            } catch (err) {
-                console.error('动态获取图片失败，请检查控制台网络:', err)
-                // 如果 ipfs.io 偶尔挂了，这里可以由你手动填个备用的，或者留空
-            }
-        }
+    //             // C. 从 JSON 里提取图片链接
+    //             if (json.image) {
+    //                 // 把 JSON 里的 ipfs:// 图片链接也转换一下
+    //                 const imgUrl = getIpfsUrl(json.image)
+    //                 setImageUri(imgUrl)
+    //             }
+    //         } catch (err) {
+    //             console.error('动态获取图片失败，请检查控制台网络:', err)
+    //             // 如果 ipfs.io 偶尔挂了，这里可以由你手动填个备用的，或者留空
+    //         }
+    //     }
 
-        fetchMetadata()
-    }, [tokenUriData]) // 只要 tokenUriData 变了，我就重新请求
+    //     fetchMetadata()
+    // }, [tokenUriData]) // 只要 tokenUriData 变了，我就重新请求
 
     if (!isConnected) return ''
     return (
@@ -168,12 +168,12 @@ export default function MintSection() {
             )}
 
             {/* 4. 新增：展示 NFT 图片区域 */}
-            {imageUri && (
+            {/* {imageUri && (
                 <div className="mt-8 p-4 border border-gray-700 rounded-xl bg-black/40 text-center animate-fade-in">
                     <p className="text-gray-400 text-sm mb-3">你的链上资产 (Token #1)</p>
                     <img src={imageUri} alt="My NFT" className="w-full h-auto rounded-lg shadow-2xl border border-gray-600 hover:scale-105 transition-transform duration-300" />
                 </div>
-            )}
+            )} */}
 
             {/* 错误提示 */}
             {mintError && <div className="mt-4 p-3 bg-red-900/20 border border-red-800 rounded-lg text-red-400 text-sm">❌ 错误: {mintError.message.includes('User rejected') ? '用户取消了签名' : '交易失败，请检查余额'}</div>}
