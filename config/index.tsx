@@ -12,6 +12,6 @@ export const config = getDefaultConfig({
     transports: {
         [mainnet.id]: http(),
         // 使用环境变量里的 RPC，如果没有就用默认的
-        [sepolia.id]: http(process.env.NEXT_PUBLIC_RPC_URL)
+        [sepolia.id]: http(process.env.NEXT_PUBLIC_RPC_URL || 'https://api.zan.top/eth-sepolia')
     }
 })
