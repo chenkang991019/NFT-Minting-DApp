@@ -4,8 +4,7 @@
 
 ---
 
-````markdown
-![image](https://github.com/chenkang991019/NFT-Minting-DApp/blob/main/public/screenshot.png)
+![App Screenshot](https://github.com/chenkang991019/NFT-Minting-DApp/blob/main/public/screenshot.png)
 
 ## ✨ Features
 
@@ -46,4 +45,7 @@ Follow these steps to run the project locally.
 git clone https://github.com/chenkang991019/NFT-Minting-DApp.git
 cd my-nft-dapp
 ```
-````
+
+```
+
+```

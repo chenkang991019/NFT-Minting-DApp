@@ -136,7 +136,19 @@ export default function MintSection() {
 
     if (!isConnected) return ''
     return (
-        <div className="p-8 border border-gray-700 rounded-2xl bg-gray-900/50 backdrop-blur-sm text-white max-w-md mx-auto shadow-xl">
+        <div
+            className="
+  relative group
+  p-8 
+  rounded-3xl 
+  border border-white/10 
+  bg-slate-900/50       /* 半透明黑底 */
+  backdrop-blur-xl      /* 毛玻璃模糊 */
+  shadow-2xl shadow-indigo-500/10 
+  max-w-md mx-auto 
+  overflow-hidden
+"
+        >
             <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">铸造 Dev NFT</h2>
 
             {/* 数据展示面板 */}

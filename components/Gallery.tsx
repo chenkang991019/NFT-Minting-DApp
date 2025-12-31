@@ -121,7 +121,19 @@ export default function Gallery() {
     if (!address) return null
 
     return (
-        <div className="max-w-4xl mx-auto mt-12 p-6">
+        <div
+            className="
+  relative group
+  p-8 
+  rounded-3xl 
+  border border-white/10 
+  bg-slate-900/50       /* 半透明黑底 */
+  backdrop-blur-xl      /* 毛玻璃模糊 */
+  shadow-2xl shadow-indigo-500/10 
+  max-w-md mx-auto 
+  overflow-hidden
+"
+        >
             <h2 className="text-3xl font-bold text-white mb-6 border-b border-gray-700 pb-2">我的 NFT 收藏 ({nfts.length})</h2>
 
             {loading && <div className="text-center text-blue-400 py-10 animate-pulse">正在链上搜寻你的资产... (请稍候)</div>}
